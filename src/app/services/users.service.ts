@@ -12,4 +12,8 @@ export class UsersService {
       .map(res => res.json());
   }
 
+  getAllPuppies() {
+  	return this.http.get('/api/puppies')
+  		// .map(res => res.json());
+  }
 }

@@ -12,11 +12,17 @@ export class UserProfileComponent implements OnInit {
   constructor(private userService: UsersService) {}
 
   ngOnInit() {
-  	this.userService.getAllUsers().subscribe(users => {
-  		console.log('users', users)
-  		this.users = users
-  	}, err => {
-  		console.log('!!!  --> ', err)
-  	})
+  	// this.userService.getAllUsers().subscribe(users => {
+  	// 	// console.log('users', users)
+  	// 	// this.users = users
+  	// }, err => {
+  	// 	console.log('!!!  --> ', err);
+  	// })
+
+    this.userService.getAllPuppies().subscribe(pups => {
+      console.log('PUPS', pups)
+    }, err => {
+        console.log('!!! --> ', err);
+    })
   }
 }
