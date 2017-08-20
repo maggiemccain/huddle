@@ -1,13 +1,14 @@
-var promise = require('bluebird');
+const promise = require('bluebird');
 
-var options = {
+const options = {
   // Initialization Options
   promiseLib: promise
 };
 
-var pgp = require('pg-promise')(options);
-var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/puppies';
-var db = pgp(connectionString);
+const pgp = require('pg-promise')(options);
+const connectionString = 'postgres://USERNAME:PWORD#@localhost:5432/puppies';
+// const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
+const db = pgp(connectionString);
 // var db = pgp({
 //     host: 'localhost',
 //     port: 5432,

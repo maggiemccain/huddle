@@ -23,10 +23,14 @@ router.get('/posts', (req, res) => {
     .catch(error => {
       res.status(500).send(error)
     });
+  // res.send('on posts page')
 });
 
-router.get('/api/puppies', db.getAllPuppies);
-router.get('/api/puppies/:id', db.getSinglePuppy);
+// router.get('/puppies', (req, res) => {
+//     res.send('yo yo yo')
+// });
+router.get('/puppies', db.getAllPuppies);
+// router.get('/api/puppies/:id', db.getSinglePuppy);
 // router.post('/api/puppies', db.createPuppy);
 // router.put('/api/puppies/:id', db.updatePuppy);
 // router.delete('/api/puppies/:id', db.removePuppy);

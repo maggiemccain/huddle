@@ -8,11 +8,11 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { UsersService } from './services/users.service';
 
 const ROUTES = [
-//   {
-//     path: '',
-//     redirectTo: 'user',
-//     pathMatch: 'full'
-//   },
+  {
+    path: '',
+    redirectTo: 'user',
+    pathMatch: 'full'
+  },
   {
     path: 'user',
     component: UserProfileComponent
