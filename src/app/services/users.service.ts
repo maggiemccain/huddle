@@ -16,4 +16,20 @@ export class UsersService {
   	return this.http.get('/api/puppies')
   		.map(res => res.json());
   }
+
+  getSinglePup() {
+  	return this.http.get('/api/puppies/1')
+  		.map(res => res.json());
+  }
+
+  addPup() {
+  	// console.log('called add pup')
+  	// 'name=Whisky&breed=annoying&age=3&sex=f'
+  	let body = {name: 'Whisky',
+  				breed: 'annoying',
+  				age: '3',
+  				sex: 'f'}
+  	return this.http.post('/api/puppies', body)
+  		.map(res => res.json());
+  }
 }

@@ -18,12 +18,36 @@ export class UserProfileComponent implements OnInit {
   	}, err => {
   		console.log('!!!  --> ', err);
   	})
+    this.getAllPups();
+  }
 
+  getAllPups() {
     this.userService.getAllPuppies().subscribe(pups => {
       console.log('PUPS', pups)
       this.users = pups['data'];
     }, err => {
         console.log('!!! --> ', err);
     })
+
   }
+
+  getSinglePup() {
+    this.userService.getSinglePup().subscribe(pup => {
+      console.log('single pup, ', pup)
+    })
+    this.getAllPups();
+  }
+
+  addPup() {
+    this.userService.addPup().subscribe(pup => {
+      console.log('ADDED pup, ', pup)
+    })
+    // this.getAllPups();
+    // console.log(this.users)
+
+  }
+
+  // removePup() {
+
+  // }
 }

@@ -30,10 +30,10 @@ router.get('/posts', (req, res) => {
 //     res.send('yo yo yo')
 // });
 router.get('/puppies', db.getAllPuppies);
-// router.get('/api/puppies/:id', db.getSinglePuppy);
-// router.post('/api/puppies', db.createPuppy);
-// router.put('/api/puppies/:id', db.updatePuppy);
-// router.delete('/api/puppies/:id', db.removePuppy);
+router.get('/puppies/:id', db.getSinglePuppy);
+router.post('/puppies', db.createPuppy);
+router.put('/puppies/:id', db.updatePuppy);
+router.delete('/puppies/:id', db.removePuppy);
 
 module.exports = router;
 

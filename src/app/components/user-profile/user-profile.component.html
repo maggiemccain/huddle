@@ -2,4 +2,11 @@
 	Profile Page
 </h1>
 
+<button (click)="addPup()">Add pup!</button>
+
+
+<button (click)="removePup()">Remove pup!</button>
+
+<button (click)="getSinglePup()">GET ONE PUP</button>
+
 <p *ngFor=" let user of users">{{user.id}}, {{user.name}}, {{user.breed}}</p>
