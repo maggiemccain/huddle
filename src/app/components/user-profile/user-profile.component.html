@@ -1,12 +1,14 @@
 <h1>
-	Profile Page
+	Profile Page 
 </h1>
 
-<button (click)="addPup()">Add pup!</button>
+<button (click)="addUser()">Add user!</button>
 
 
-<button (click)="removePup()">Remove pup!</button>
+<button (click)="removeUser()">Remove user!</button>
 
-<button (click)="getSinglePup()">GET ONE PUP</button>
+<button (click)="getSingleUser()">GET ONE user</button>
 
-<p *ngFor=" let user of users">{{user.id}}, {{user.name}}, {{user.breed}}</p>
+<button (click)="updateUser(3)">Change up a user</button>
+
+<p *ngFor=" let user of users">{{user.id}}, {{user.firstname}}, {{user.lastname}}, {{user.datecreated}}</p>

@@ -6,27 +6,27 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://USERNAME:PWORD#@localhost:5432/puppies';
+const connectionString = 'postgres://USERNAME:pword#@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
 //     host: 'localhost',
 //     port: 5432,
-//     database: 'puppies',
+//     database: 'huddle',
 //     user: '',
 //     password: ''
 // });
 
 // add query functions
 
-function getAllPuppies(req, res, next) {
-  db.any('select * from pups')
+function getAllUsers(req, res, next) {
+  db.any('select * from users')
     .then(function (data) {
       res.status(200)
         .json({
-          status: 'success',
+          status: 'success', 
           data: data,
-          message: 'Retrieved ALL puppies'
+          message: 'Retrieved ALL Users'
         });
     })
     .catch(function (err) {
@@ -34,15 +34,15 @@ function getAllPuppies(req, res, next) {
     });
 };
 
-function getSinglePuppy(req, res, next) { 
-  var pupID = parseInt(req.params.id);
-  db.one('select * from pups where id = $1', pupID)
+function getSingleUser(req, res, next) { 
+  var userId = parseInt(req.params.id);
+  db.one('select * from users where id = $1', userId)
     .then(function (data) {
       res.status(200)
         .json({
           status: 'success',
           data: data,
-          message: 'Retrieved ONE puppy'
+          message: 'Retrieved ONE user'
         });
     })
     .catch(function (err) {
@@ -50,17 +50,16 @@ function getSinglePuppy(req, res, next) {
     });
 };
 
-// name=Whisky&breed=annoying&age=3&sex=f
-function createPuppy(req, res, next) {
-  req.body.age = parseInt(req.body.age);
-  db.none('insert into pups(name, breed, age, sex)' +
-      'values(${name}, ${breed}, ${age}, ${sex})',
+function createUser(req, res, next) {
+  req.body.phone = parseInt(req.body.phone);
+  db.none('insert into users (firstName, lastName, email, phone)' +
+      'values(${firstname}, ${lastname}, ${email}, ${phone})',
     req.body)
     .then(function () {
       res.status(200)
         .json({
           status: 'success',
-          message: 'Inserted one puppy'
+          message: 'Inserted one User'
         });
     })
     .catch(function (err) {
@@ -68,15 +67,15 @@ function createPuppy(req, res, next) {
     });
 };
 
-function updatePuppy(req, res, next) {
-  db.none('update pups set name=$1, breed=$2, age=$3, sex=$4 where id=$5',
-    [req.body.name, req.body.breed, parseInt(req.body.age),
-      req.body.sex, parseInt(req.params.id)])
+function updateUser(req, res, next) {
+  db.none('update users set firstName=$1, lastName=$2, email=$3, phone=$4 where id=$5',
+    [req.body.firstname, req.body.lastname, req.body.email, parseInt(req.body.phone),
+     parseInt(req.params.id)])
     .then(function () {
       res.status(200)
         .json({
           status: 'success',
-          message: 'Updated puppy'
+          message: 'Updated User'
         });
     })
     .catch(function (err) {
@@ -84,15 +83,15 @@ function updatePuppy(req, res, next) {
     });
 };
 
-function removePuppy(req, res, next) {
-  var pupID = parseInt(req.params.id);
-  db.result('delete from pups where id = $1', pupID)
+function removeUser(req, res, next) {
+  var userId = parseInt(req.params.id);
+  db.result('delete from users where id = $1', userId)
     .then(function (result) {
       /* jshint ignore:start */
       res.status(200)
         .json({
           status: 'success',
-          message: `Removed ${result.rowCount} puppy`
+          message: `Removed ${result.rowCount} User`
         });
       /* jshint ignore:end */
     })
@@ -103,9 +102,9 @@ function removePuppy(req, res, next) {
 
 
 module.exports = {
-  getAllPuppies: getAllPuppies,
-  getSinglePuppy: getSinglePuppy,
-  createPuppy: createPuppy,
-  updatePuppy: updatePuppy,
-  removePuppy: removePuppy
+  getAllUsers: getAllUsers,
+  getSingleUser: getSingleUser,
+  createUser: createUser,
+  updateUser: updateUser,
+  removeUser: removeUser
 };

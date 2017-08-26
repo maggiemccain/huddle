@@ -12,40 +12,49 @@ export class UserProfileComponent implements OnInit {
   constructor(private userService: UsersService) {}
 
   ngOnInit() {
-  	this.userService.getAllUsers().subscribe(users => {
-  		// console.log('users', users)
-  		// this.users = users
-  	}, err => {
-  		console.log('!!!  --> ', err);
-  	})
-    this.getAllPups();
-  }
+    console.log('initialized!');
+    this.getAllUsers();
+  };
 
-  getAllPups() {
-    this.userService.getAllPuppies().subscribe(pups => {
-      console.log('PUPS', pups)
-      this.users = pups['data'];
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe(users => {
+      console.log('USERS', users['data'])
+      this.users = users['data'];
     }, err => {
         console.log('!!! --> ', err);
     })
 
+  };
+
+  getSingleUser() {
+    this.userService.getSingleUser().subscribe(user => {
+      console.log('single user, ', user)
+    })
+  };
+
+  updateUser(id) {
+    this.userService.updateUser(id).subscribe(user => {
+      console.log('updated user, ', user)
+    })
+    this.getAllUsers();
   }
 
-  getSinglePup() {
-    this.userService.getSinglePup().subscribe(pup => {
-      console.log('single pup, ', pup)
+  removeUser() {
+    this.userService.removeUser().subscribe(user => {
+      console.log('single user, ', user)
     })
-    this.getAllPups();
-  }
+    this.getAllUsers();
 
-  addPup() {
-    this.userService.addPup().subscribe(pup => {
-      console.log('ADDED pup, ', pup)
+  };
+
+  addUser() {
+    this.userService.addUser().subscribe(user => {
+      console.log('ADDED user, ', user)
     })
-    // this.getAllPups();
+    this.getAllUsers();
     // console.log(this.users)
 
-  }
+  };
 
   // removePup() {
 
