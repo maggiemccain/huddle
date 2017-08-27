@@ -6,7 +6,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://USERNAME:pword#@localhost:5432/huddle';
+const connectionString = 'postgres://USERNAME:PWORD#@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
@@ -52,14 +52,15 @@ function getSingleUser(req, res, next) {
 
 function createUser(req, res, next) {
   req.body.phone = parseInt(req.body.phone);
-  db.none('insert into users (firstName, lastName, email, phone)' +
+  db.result('insert into users (firstName, lastName, email, phone)' +
       'values(${firstname}, ${lastname}, ${email}, ${phone})',
     req.body)
-    .then(function () {
+    .then(function (result) {
       res.status(200)
         .json({
           status: 'success',
-          message: 'Inserted one User'
+          message: 'Inserted one User',
+          data: result
         });
     })
     .catch(function (err) {

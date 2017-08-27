@@ -20,12 +20,15 @@ export class UsersService {
   		.map(res => res.json());
   };
 
-  addUser(): Observable<any> {
-  	let body = {firstname: 'Ester',
-  				lastname: 'Hinkly',
-  				email: 'eh.atl09@uga.org',
-  				phone: 7}
-  	return this.http.post('/api/users', body)
+  addUser(payload?): Observable<any> {
+    if (!payload) {
+      let payload = {firstname: 'Ester',
+          lastname: 'Zellwig',
+          email: 'eh.atl09@uga.org',
+          phone: 7}
+
+    }
+  	return this.http.post('/api/users', payload)
   		.map(res => res.json());
   };
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from '../../services/users.service'
+import { UsersService } from '../../services/users.service';
+import { NewUserFormComponent } from '../new-user-form/new-user-form.component';
 
 
 @Component({
@@ -12,7 +13,6 @@ export class UserProfileComponent implements OnInit {
   constructor(private userService: UsersService) {}
 
   ngOnInit() {
-    console.log('initialized!');
     this.getAllUsers();
   };
 
@@ -52,8 +52,6 @@ export class UserProfileComponent implements OnInit {
       console.log('ADDED user, ', user)
     })
     this.getAllUsers();
-    // console.log(this.users)
-
   };
 
   // removePup() {
