@@ -15,7 +15,6 @@ import { MapService } from './services/map.service';
 import { NewUserFormComponent } from './components/new-user-form/new-user-form.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { MapComponent } from './components/map/map.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
 
 const ROUTES = [
   {
@@ -44,8 +43,7 @@ const ROUTES = [
     UserProfileComponent,
     NewUserFormComponent,
     LandingPageComponent,
-    MapComponent,
-    NavigationComponent
+    MapComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +51,7 @@ const ROUTES = [
     ReactiveFormsModule,
     CommonModule,
     AgmCoreModule.forRoot({
-      apiKey: 'YOUR_KEY'
+      apiKey: ''
     }),
     AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 

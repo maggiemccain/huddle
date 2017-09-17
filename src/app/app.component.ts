@@ -5,20 +5,22 @@ import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   title = 'HUDDLE';
   users: any;
 
-  constructor(private userService: UsersService, private authService: AuthService) {}
+  constructor(private userService: UsersService, public auth: AuthService) {
+    auth.handleAuthentication();
+  }
 
   ngOnInit() {};
   login() {
-    this.authService.login();
+    this.auth.login();
   };
   logout() {
-    this.authService.logout();
+    this.auth.logout();
   };
 
 }
