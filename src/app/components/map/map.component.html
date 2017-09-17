@@ -1,10 +1,12 @@
-
-<h1>{{ title }}</h1>
-
-<agm-map [latitude]="lat" [longitude]="lng">
-  <agm-marker [latitude]="lat" [longitude]="lng">
-  	<agm-info-window>
-  		<strong>this is you!</strong>
-  	</agm-info-window>
+<navigation></navigation>
+<button (click)="geocodeAddress('249')">Click me</button>
+<agm-map [latitude]="lat" [zoom]="12" [longitude]="lng">
+  <agm-marker *ngFor="let huddle of huddles" [latitude]="huddle.lat" [longitude]="huddle.lng">
+    <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
+      <ng-template>
+        <strong (click)="log($event)">{{huddle.label}}</strong>
+      </ng-template>
+    </agm-snazzy-info-window>
   </agm-marker>
 </agm-map> 
+

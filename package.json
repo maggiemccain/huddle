@@ -27,6 +27,7 @@
     "bootstrap": "^4.0.0-beta",
     "core-js": "^2.4.1",
     "express": "^4.15.3",
+    "google-maps-api-loader": "^0.3.0",
     "ngx-bootstrap": "^1.9.1",
     "pg": "^6.1.0",
     "pg-promise": "^5.9.7",

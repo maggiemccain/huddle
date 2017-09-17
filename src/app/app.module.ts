@@ -4,15 +4,18 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
-import { AgmCoreModule } from '@agm/core';
+import { AgmCoreModule, MapsAPILoader } from '@agm/core';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 
 import { AppComponent } from './app.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersService } from './services/users.service';
 import { AuthService } from './services/auth.service';
+import { MapService } from './services/map.service';
 import { NewUserFormComponent } from './components/new-user-form/new-user-form.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { MapComponent } from './components/map/map.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 const ROUTES = [
   {
@@ -41,7 +44,8 @@ const ROUTES = [
     UserProfileComponent,
     NewUserFormComponent,
     LandingPageComponent,
-    MapComponent
+    MapComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
@@ -49,11 +53,12 @@ const ROUTES = [
     ReactiveFormsModule,
     CommonModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDH14DDkf5BgZ0wedEj0aGB3RLgfL61m0c'
+      apiKey: 'YOUR_KEY'
     }),
+    AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 
   ],
-  providers: [ UsersService, AuthService ],
+  providers: [ UsersService, AuthService, MapService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
