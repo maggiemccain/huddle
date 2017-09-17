@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../../services/map.service';
+import { GatheringsService } from '../../services/gatherings.service';
 
 @Component({
   selector: 'app-map',
@@ -11,26 +12,25 @@ export class MapComponent implements OnInit {
   lat: number = 33.7490;
   lng: number = -84.386330;
   huddles: Object[] = [
-  	{
-	  lat: 33.8172,
-	  lng: -84.3712,
-	  label: 'Passion City Church Youth Group',
-	  draggable: false
-  	},
-  	{
-	  lat: 33.7568,
-	  lng: -84.3544,
-	  label: 'Young Adults Serve Group',
-	  draggable: false
-  	}
+                      	{
+                    	  lat: 33.8172,
+                    	  lng: -84.3760,
+                    	  label: 'Passion City Church Youth Group',
+                    	  draggable: false
+                      	},
+                      	{
+                    	  lat: 33.7568,
+                    	  lng: -84.3500,
+                    	  label: 'Young Adults Serve Group',
+                    	  draggable: false
+                      	}
   ]
 
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService, private gatheringsService: GatheringsService) { }
 
     ngOnInit() { 
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
-          	console.log(position)
           	setTimeout(() => { //need to figure out timing issue here
             	this.lat =  position.coords.latitude;
             	this.lng =  position.coords.longitude;
@@ -43,26 +43,27 @@ export class MapComponent implements OnInit {
           // Browser doesn't support Geolocation
           // this.handleLocationError(false, infoWindow, map.getCenter());
         }
+
+        this.getAllGatherings();
     }
 
     log(e) {
-    	console.log('yup ', e.target.innerText)
-    }
+    	console.log(e.target.innerText);
+    };
 
-    createMarker(lat, lng) {
-    	let marker = {	
-    					'lat': lat,
-    					'lng': lng,
-    					'label': 'TBD',
-    					'draggable': false
-    				};
-    	this.huddles.push(marker)
-    }
+    createMarker(huddle) {
+        this.huddles.push({
+                       'lat': Number(huddle.latitude),
+                       'lng': Number(huddle.longitude),
+                       'label': huddle.title,
+                       'draggable': false 
+        })
+    };
 
 	geocodeAddress(address) {
-    	this.mapService.getGeocoding( '240 N Highland Ave, Atlanta GA 30307' ).subscribe((res) => {
+    	this.mapService.getGeocoding('240 N Highland Ave, Atlanta GA 30307').subscribe((res) => {
 			let coords = res.toString().replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '').split(' ');
-			this.createMarker(Number(coords[0]), Number(coords[1]));
+			// this.createMarker(Number(coords[0]), Number(coords[1]));
 		})
 
 	}
@@ -74,5 +75,19 @@ export class MapComponent implements OnInit {
 		//                       'Error: Your browser doesn\'t support geolocation.');
 		// infoWindow.open(map);
 	}
+
+  getAllGatherings() {
+    this.gatheringsService.getAllGatherings().subscribe(gatherings => {
+      let huddles = gatherings['data']
+      huddles.forEach((huddle)=> {
+        this.createMarker(huddle);
+      })
+    }, err => {
+        console.log('!!! --> ', err);
+    })
+
+  };
+
+
 }
 

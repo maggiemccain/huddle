@@ -31,7 +31,6 @@ export class NewUserFormComponent implements OnInit {
 
   ngOnInit() {
   	this.successNotification = false;
-  	console.log('the form is initiated');
   };
   onSubmit() {
   	console.log('clicked submit button', this.form);

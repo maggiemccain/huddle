@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
+import { AuthService } from '../../services/auth.service';
 import { NewUserFormComponent } from '../new-user-form/new-user-form.component';
 
 
@@ -10,10 +11,21 @@ import { NewUserFormComponent } from '../new-user-form/new-user-form.component';
 })
 export class UserProfileComponent implements OnInit {
 	users: Array<Object>;
-  constructor(private userService: UsersService) {}
+  profile: any;
+
+  constructor(private userService: UsersService, public auth: AuthService) {}
 
   ngOnInit() {
-    this.getAllUsers();
+    // this.getAllUsers();
+
+    if (this.auth.userProfile) {
+      this.profile = this.auth.userProfile;
+    } else {
+      this.auth.getProfile((err, profile) => {
+        console.log(profile)
+        this.profile = profile;
+      });
+    }
   };
 
   getAllUsers() {

@@ -10,6 +10,7 @@ import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 import { AppComponent } from './app.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersService } from './services/users.service';
+import { GatheringsService } from './services/gatherings.service';
 import { AuthService } from './services/auth.service';
 import { MapService } from './services/map.service';
 import { NewUserFormComponent } from './components/new-user-form/new-user-form.component';
@@ -56,7 +57,7 @@ const ROUTES = [
     AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 
   ],
-  providers: [ UsersService, AuthService, MapService ],
+  providers: [ UsersService, AuthService, MapService, GatheringsService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

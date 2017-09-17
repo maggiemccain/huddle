@@ -101,11 +101,44 @@ function removeUser(req, res, next) {
     });
 };
 
+function getAllGatherings(req, res, next) {
+  db.any('select * from gatherings')
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success', 
+          data: data,
+          message: 'Retrieved ALL gatherings'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
+function createGathering(req, res, next) {
+  db.result('insert into users (title, latitude, longitude)' +
+      'values(${title}, ${latitude}, ${longitude})',
+    req.body)
+    .then(function (result) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Inserted one gathering',
+          data: result
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
 
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
   createUser: createUser,
   updateUser: updateUser,
-  removeUser: removeUser
+  removeUser: removeUser,
+  getAllGatherings: getAllGatherings,
+  createGathering: createGathering
 };
