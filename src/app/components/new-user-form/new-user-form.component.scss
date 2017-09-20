@@ -1,0 +1,32 @@
+.confirmation-box {
+	background-color: lime;
+	border: 2px solid lime;
+}
+form {
+	width: 70%;
+/*	margin: 0 auto;
+	text-align: center;*/
+	.row {
+		width: 100%;
+		.name {
+			width: 50%;
+			label {
+				float:left;
+			}
+			input {
+				width: 75%;
+			}
+		}
+	}
+	.email {
+		input {
+			width: 75%;
+		}
+	}
+}
+.pull-right {
+	float: right;
+}
+input {
+	margin-bottom: 10px;
+}
