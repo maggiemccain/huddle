@@ -18,6 +18,7 @@ import { NewUserFormComponent } from './components/new-user-form/new-user-form.c
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { MapComponent } from './components/map/map.component';
 import { NewChurchFormComponent } from './components/new-church-form/new-church-form.component';
+import { ChurchComponent } from './components/church/church.component';
 
 const ROUTES = [
   {
@@ -44,6 +45,10 @@ const ROUTES = [
   {
     path: 'new-church',
     component: NewChurchFormComponent
+  },
+  {
+    path: 'church-profile/:id',
+    component: ChurchComponent
   }
 ];
 
@@ -55,7 +60,8 @@ const ROUTES = [
     NewUserFormComponent,
     LandingPageComponent,
     MapComponent,
-    NewChurchFormComponent
+    NewChurchFormComponent,
+    ChurchComponent
   ],
   imports: [
     BrowserModule,

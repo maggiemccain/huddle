@@ -6,7 +6,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://username:pword#@localhost:5432/huddle';
+const connectionString = 'postgres://username:PWORD#@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
@@ -151,7 +151,7 @@ function getAllChurches(req, res, next) {
 };
 
 function getSingleChurch(req, res, next) { 
-  var userId = parseInt(req.params.id);
+  var churchId = parseInt(req.params.id);
   db.one('select * from churches where id = $1', churchId)
     .then(function (data) {
       res.status(200)
@@ -169,7 +169,7 @@ function getSingleChurch(req, res, next) {
 function createChurch(req, res, next) {
   // req.body.phone = parseInt(req.body.phone);
   db.result('insert into churches (name, adminFirstName, adminLastName, adminEmail, street, city, state, zip, latitude, longitude)' +
-      'values(${name}, ${adminFirstName}, ${adminLastName}, ${adminEmail}, ${street}, ${city}, ${state}, ${zip}, ${latitude}, ${longitude})',
+      'values(${name}, ${adminFirstName}, ${adminLastName}, ${adminEmail}, ${street}, ${city}, ${state}, ${zip}, ${latitude}, ${longitude}) RETURNING id',
     req.body)
     .then(function (result) {
       res.status(200)

@@ -13,27 +13,13 @@ export class ChurchService {
   		.map(res => res.json());
   };
 
-  getSingleChurch(): Observable<any> {
-  	let body = '3'
-  	let url = '/api/churches/' + body
+  getSingleChurch(id: any): Observable<any> {
+  	let url = '/api/churches/' + id
   	return this.http.get(url)
   		.map(res => res.json());
   };
 
-  addChurch(payload?): Observable<any> {
-    if (!payload) {
-      let payload = {name: 'Unitarian International',
-          adminFirstName: 'Zellwig',
-          adminLastName: 'Giroff',
-          adminEmail: 'zellwig@uga.org',
-          street: '100 North Highland Avenue',
-      	  city: 'Atlanta',
-      	  state: 'GA',
-      	  zip: '30307',
-      	  latitude: 33.7909,
-      	  longitude: -84.3857}
-
-    }
+  addChurch(payload): Observable<any> {
   	return this.http.post('/api/churches', payload)
   		.map(res => res.json());
   };

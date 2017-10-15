@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ChurchService } from '../../services/church.service';
 import { MapService } from '../../services/map.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-new-church-form',
@@ -10,8 +12,9 @@ import { MapService } from '../../services/map.service';
 })
 export class NewChurchFormComponent implements OnInit {
   form: FormGroup;
-  successNotification: boolean;
-  constructor(private fb: FormBuilder, private churchService: ChurchService, private mapService: MapService) { 
+  // churchSub;
+  // mapSub;
+  constructor(private fb: FormBuilder, private churchService: ChurchService, private mapService: MapService, private router: Router ) { 
  // 	id SERIAL PRIMARY KEY,
  // 	name VARCHAR(100) NOT NULL,
 	// street VARCHAR(100),
@@ -36,10 +39,8 @@ export class NewChurchFormComponent implements OnInit {
   };
 
   ngOnInit() {
-  	this.successNotification = false;
   };
   onSubmit() {
-  	// console.log('clicked submit button', this.form);
   	this.form.value['zip'] = this.form.value['zip'].toString();
   	let address = [this.form.value.street, this.form.value.city, this.form.value.state, this.form.value.zip];
   	let stringAddress = address.join(' ');
@@ -49,13 +50,13 @@ export class NewChurchFormComponent implements OnInit {
 		  	this.form.value['longitude'] = Number(res[1]);
 		    this.churchService.addChurch(this.form.value).subscribe(res => {
 		    	if (res.status = 200) {
-			      console.log('new CHURCH created, ', res)
-			      this.successNotification = true;
+			      console.log('RESPONSE : ', res.data.rows[0].id)
+			      this.router.navigateByUrl('/church-profile/' + res.data.rows[0].id)
 		    	} else {
-		    		console.log('what happened here', res)
+		    		console.log('unsuccessful API call',res);	
 		    	}
 		    }, err => {
-		    	console.log('!!! --> ', err);
+		    	console.log(err)
 		    });
   		})
   		.catch((err) => {
@@ -70,7 +71,6 @@ export class NewChurchFormComponent implements OnInit {
 		this.mapService.getGeocoding(address).subscribe((res) => {
 			  resolve(res.toString().replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '').split(' '))
 		}, err => {
-			console.log('ERROR: ', err)
 			reject(err)
 		})
   	})
