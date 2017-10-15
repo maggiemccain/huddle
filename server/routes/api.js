@@ -21,6 +21,13 @@ router.post('/users', db.createUser);
 router.put('/users/:id', db.updateUser);
 router.delete('/users/:id', db.removeUser);
 
+// CHURCHES
+router.get('/churches', db.getAllChurches);
+router.get('/churches/:id', db.getSingleChurch);
+router.post('/churches', db.createChurch);
+router.put('/churches/:id', db.updateChurch);
+router.delete('churches/:id', db.removeChurch);
+
 // GATHERINGS
 router.get('/gatherings', db.getAllGatherings);
 // router.get('/gatherings/:id', db.getSingleGathering);

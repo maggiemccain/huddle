@@ -60,9 +60,10 @@ export class MapComponent implements OnInit {
         })
     };
 
-	geocodeAddress(address) {
-    	this.mapService.getGeocoding('240 N Highland Ave, Atlanta GA 30307').subscribe((res) => {
-			let coords = res.toString().replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '').split(' ');
+	geocodeAddress(address?) {
+      let add = address ? address : '240 N Highland Ave, Atlanta GA 30307'
+    	this.mapService.getGeocoding(add).subscribe((res) => {
+			  let coords = res.toString().replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '').split(' ');
 			// this.createMarker(Number(coords[0]), Number(coords[1]));
 		})
 

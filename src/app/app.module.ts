@@ -13,9 +13,11 @@ import { UsersService } from './services/users.service';
 import { GatheringsService } from './services/gatherings.service';
 import { AuthService } from './services/auth.service';
 import { MapService } from './services/map.service';
+import { ChurchService } from './services/church.service';
 import { NewUserFormComponent } from './components/new-user-form/new-user-form.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { MapComponent } from './components/map/map.component';
+import { NewChurchFormComponent } from './components/new-church-form/new-church-form.component';
 
 const ROUTES = [
   {
@@ -38,6 +40,10 @@ const ROUTES = [
   {
     path: 'new-user',
     component: NewUserFormComponent
+  },
+  {
+    path: 'new-church',
+    component: NewChurchFormComponent
   }
 ];
 
@@ -48,7 +54,8 @@ const ROUTES = [
     UserProfileComponent,
     NewUserFormComponent,
     LandingPageComponent,
-    MapComponent
+    MapComponent,
+    NewChurchFormComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +68,7 @@ const ROUTES = [
     AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 
   ],
-  providers: [ UsersService, AuthService, MapService, GatheringsService ],
+  providers: [ UsersService, AuthService, MapService, GatheringsService, ChurchService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,7 +10,7 @@ export class MapService {
   constructor(private __loader: MapsAPILoader) { }
 
 
-	getGeocoding(address: string) {
+	getGeocoding(address: string): Observable<any> {
 	    return Observable.create(observer => {
 	        try {
 	            //at this point the variable google may be still undefined (google maps scripts still loading)
