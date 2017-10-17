@@ -6,7 +6,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://username:PWORD#@localhost:5432/huddle';
+const connectionString = 'postgres://username:pword#@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
@@ -69,7 +69,7 @@ function createUser(req, res, next) {
 };
 
 function updateUser(req, res, next) {
-  db.none('update users set firstName=$1, lastName=$2, email=$3, phone=$4 where id=$5',
+  db.one('update users set firstName=$1, lastName=$2, email=$3, phone=$4 where id=$5 RETURNING *',
     [req.body.firstname, req.body.lastname, req.body.email, parseInt(req.body.phone),
      parseInt(req.params.id)])
     .then(function () {
@@ -185,7 +185,7 @@ function createChurch(req, res, next) {
 };
 
 function updateChurch(req, res, next) {
-  db.none('update churches set name=$1, adminFirstName=$2, adminLastName=$3, adminEmail=$4, street=$5, city=$6, state=$7, zip=$8, latitude=$9, longitude=$10 where id=$11',
+  db.one('update churches set name=$1, adminFirstName=$2, adminLastName=$3, adminEmail=$4, street=$5, city=$6, state=$7, zip=$8, latitude=$9, longitude=$10 where id=$11 RETURNING *',
     [req.body.name, 
     req.body.adminFirstName, 
     req.body.adminLastName,
@@ -197,14 +197,15 @@ function updateChurch(req, res, next) {
     req.body.latitude,
     req.body.longitude,
      parseInt(req.params.id)])
-    .then(function () {
+    .then((result) => {
       res.status(200)
         .json({
           status: 'success',
-          message: 'Updated church'
+          message: 'Updated church',
+          data: result
         });
     })
-    .catch(function (err) {
+    .catch((err) => {
       return next(err);
     });
 };

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
+import { FormsModule }   from '@angular/forms';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 

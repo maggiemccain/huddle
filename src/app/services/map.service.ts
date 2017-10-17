@@ -41,5 +41,14 @@ export class MapService {
 
 	    });
 	}
+  geocodeAddress(address) {
+  	return new Promise((resolve, reject) => {
+		this.getGeocoding(address).subscribe((res) => {
+			  resolve(res.toString().replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '').split(' '))
+		}, err => {
+			reject(err)
+		})
+  	})
+  };
 
 }

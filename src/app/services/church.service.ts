@@ -24,26 +24,14 @@ export class ChurchService {
   		.map(res => res.json());
   };
 
-  removeChurch(): Observable<any> {
-  	let body = '2'
-  	let url = '/api/churches/' + body
+  removeChurch(id: any): Observable<any> {
+  	let url = '/api/churches/' + id;
   	return this.http.delete(url)
   		.map(res => res.json());
   };
 
-  updateChurch(id): Observable<any> {
-  	let body = {name: 'Unitarian International',
-          adminFirstName: 'Zellwig',
-          adminLastName: 'CHANGED',
-          adminEmail: 'zellwig@uga.org',
-          street: '100 North Highland Avenue',
-      	  city: 'Atlanta',
-      	  state: 'GA',
-      	  zip: 30307,
-      	  latitude: 33.7909,
-      	  longitude: -84.3857}
-  	let url = '/api/churches/' + id
-  	return this.http.put(url, body)
+  updateChurch(id, body): Observable<any> {
+  	return this.http.put('/api/churches/' + id, body)
   		.map(res => res.json());
   }
 }
