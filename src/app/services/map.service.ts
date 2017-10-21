@@ -23,7 +23,7 @@ export class MapService {
 	                        observer.next(place);
 	                        observer.complete();
 	                    } else {
-	                        console.error('Error - ', results, ' & Status - ', status);
+	                        // console.error('Error - ', results, ' & Status - ', status);
 	                        if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
 	                            observer.error('Address not found!');
 	                        }else {

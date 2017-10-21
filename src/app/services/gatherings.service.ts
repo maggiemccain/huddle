@@ -13,37 +13,26 @@ export class GatheringsService {
   		.map(res => res.json());
   };
 
-  getSingleGathering(): Observable<any> {
-  	let body = '3'
-  	let url = '/api/gatherings/' + body
+  getSingleGathering(id: any): Observable<any> {
+  	let body = id.toString(); // might need
+  	let url = '/api/gatherings/' + id
   	return this.http.get(url)
   		.map(res => res.json());
   };
 
-  addGathering(payload?): Observable<any> {
-    if (!payload) {
-      let payload = {title: 'Young Adult Gathering',
-          latitude: 33.9147,
-          longitude: -84.3376
-          }
-
-    }
+  addGathering(payload: any): Observable<any> {
   	return this.http.post('/api/gatherings', payload)
   		.map(res => res.json());
   };
 
-  removeGathering(): Observable<any> {
-  	let body = '2'
-  	let url = '/api/gatherings/' + body
+  removeGathering(id: any): Observable<any> {
+  	let url = '/api/gatherings/' + id
   	return this.http.delete(url)
   		.map(res => res.json());
   };
 
   updateGathering(id): Observable<any> {
-  	let body = {firstname: 'Gerald',
-  				lastname: 'Griffin',
-  				email: 'griffy@msn.com',
-  				phone: 3}
+  	let body = {}
   	let url = '/api/gatherings/' + id
   	return this.http.put(url, body)
   		.map(res => res.json());

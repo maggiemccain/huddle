@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
       this.profile = this.auth.userProfile;
     } else {
       this.auth.getProfile((err, profile) => {
-        console.log(profile)
+        console.log('PROFILE:', profile)
         this.profile = profile;
       });
     }

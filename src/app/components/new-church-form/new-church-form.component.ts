@@ -15,17 +15,6 @@ export class NewChurchFormComponent implements OnInit {
   // churchSub;
   // mapSub;
   constructor(private fb: FormBuilder, private churchService: ChurchService, private mapService: MapService, private router: Router ) { 
- // 	id SERIAL PRIMARY KEY,
- // 	name VARCHAR(100) NOT NULL,
-	// street VARCHAR(100),
-	// city VARCHAR(20),
-	// state VARCHAR(3),
-	// zip int(5),
-	// latitude decimal NOT NULL,
- // 	longitude decimal NOT NULL,
- // 	adminFirstName VARCHAR(20) NOT NULL,
- // 	adminLastName VARCHAR(20) NOT NULL,
- // 	adminEmail VARCHAR(50) NOT NULL,
    this.form = fb.group({
         "name": ["", Validators.required],
         "street": ["", Validators.required],

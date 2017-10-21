@@ -6,7 +6,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://username:pword#@localhost:5432/huddle';
+const connectionString = 'postgres://UNAME:PWORD#@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
@@ -117,8 +117,8 @@ function getAllGatherings(req, res, next) {
 };
 
 function createGathering(req, res, next) {
-  db.result('insert into users (title, latitude, longitude)' +
-      'values(${title}, ${latitude}, ${longitude})',
+  db.one('insert into gatherings (title, location, street, city, state, zip, latitude, longitude, schedule, church_id, leader_id)' +
+      'values(${title}, ${location}, ${street}, ${city}, ${state}, ${zip}, ${latitude}, ${longitude}, ${schedule}, ${church_id}, ${leader_id}) RETURNING *',
     req.body)
     .then(function (result) {
       res.status(200)

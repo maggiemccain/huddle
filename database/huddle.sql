@@ -36,7 +36,7 @@ CREATE DATABASE huddle;
 	street VARCHAR(100),
 	city VARCHAR(20),
 	state VARCHAR(20),
-	-- zip INTEGER(5),
+	zip VARCHAR(5),
 	bio VARCHAR(500),
 	maritalStatus VARCHAR(50),
 	church_id int,
@@ -54,20 +54,20 @@ INSERT INTO users (firstName, lastName, email, church_id)
 	VALUES ('Jilly', 'Nelson', 'nelson.j@hotmail.com', 2);
 
  CREATE TABLE gatherings (
- 	-- id SERIAL PRIMARY KEY,
+ 	id serial UNIQUE,
  	title VARCHAR(100) NOT NULL,
  	location VARCHAR(50),
 	street VARCHAR(100),
 	city VARCHAR(20),
 	state VARCHAR(3),
+	zip VARCHAR(5),
  	latitude decimal NOT NULL,
  	longitude decimal NOT NULL,
 	schedule VARCHAR(100),
 	dateCreated timestamp DEFAULT CURRENT_TIMESTAMP,
-	church_id int NOT NULL references churches(id) ON DELETE CASCADE,
-	leader_id int NOT NULL references users(id),
-	PRIMARY KEY (church_id, leader_id)
-	-- FOREIGN KEY (church_id, leader_id) REFERENCES churches (id) users (id) ON DELETE CASCADE
+	church_id int NOT NULL REFERENCES churches(id) ON DELETE CASCADE,
+	leader_id int NOT NULL REFERENCES users(id),
+	PRIMARY KEY (church_id, leader_id, title)
  );
 
   INSERT INTO gatherings (title, latitude, longitude, church_id, leader_id)
@@ -76,12 +76,19 @@ INSERT INTO users (firstName, lastName, email, church_id)
   INSERT INTO gatherings (title, latitude, longitude, church_id, leader_id)
   	VALUES ('Passion City Church Mission Team Meeting', 33.8172, -84.3712, 2, 3);
 
---  CREATE TABLE users_gatherings (
---   member_id int NOT NULL,
---   gathering_id int NOT NULL,
---   dateJoined timestamp DEFAULT CURRENT_TIMESTAMP,
---   dateDeparted timestamp,
---   -- PRIMARY KEY (member_id, gathering_id)
---   -- FOREIGN KEY (member_id) REFERENCES users(id) ON UPDATE CASCADE,
---   -- FOREIGN KEY (gathering_id) REFERENCES gatherings(id) ON UPDATE CASCADE
--- );
+ CREATE TABLE users_gatherings (
+  member_id int NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  gathering_id int NOT NULL REFERENCES gatherings(id) ON DELETE CASCADE,
+  dateJoined timestamp DEFAULT CURRENT_TIMESTAMP,
+  departed boolean DEFAULT FALSE,
+  dateDeparted timestamp,
+  PRIMARY KEY (member_id, gathering_id)
+);
+
+-- INSERT INTO users (member_id, gathering_id)
+-- 	VALUES (1, 2);
+
+-- INSERT INTO users (member_id, gathering_id)
+-- 	VALUES (2, 1);
+
+

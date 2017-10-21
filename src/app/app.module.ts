@@ -20,6 +20,8 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import { MapComponent } from './components/map/map.component';
 import { NewChurchFormComponent } from './components/new-church-form/new-church-form.component';
 import { ChurchComponent } from './components/church/church.component';
+import { GatheringFormComponent } from './components/gatherings/gathering-form/gathering-form.component';
+import { GatheringProfileComponent } from './components/gatherings/gathering-profile/gathering-profile.component';
 
 const ROUTES = [
   {
@@ -50,6 +52,14 @@ const ROUTES = [
   {
     path: 'church-profile/:id',
     component: ChurchComponent
+  },
+  {
+    path: 'gathering-form',
+    component: GatheringFormComponent
+  },
+  {
+    path: 'gathering-form/:id',
+    component: GatheringFormComponent
   }
 ];
 
@@ -62,7 +72,9 @@ const ROUTES = [
     LandingPageComponent,
     MapComponent,
     NewChurchFormComponent,
-    ChurchComponent
+    ChurchComponent,
+    GatheringFormComponent,
+    GatheringProfileComponent
   ],
   imports: [
     BrowserModule,
