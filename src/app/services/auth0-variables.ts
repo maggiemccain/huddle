@@ -5,7 +5,7 @@ interface AuthConfig {
 }
 
 export const AUTH_CONFIG: AuthConfig = {
-  clientID: '',
+  clientID: 'zQyJwfP98tvH7mRQtBMyf4Doix_YWGo7',
   domain: 'huddle.auth0.com',
   callbackURL: 'http://localhost:3000/user'
 };

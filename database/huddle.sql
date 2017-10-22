@@ -39,7 +39,7 @@ CREATE DATABASE huddle;
 	zip VARCHAR(5),
 	bio VARCHAR(500),
 	maritalStatus VARCHAR(50),
-	church_id int,
+	church_id int, -- required?
 	dateCreated timestamp DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (church_id) REFERENCES churches (ID)
  );

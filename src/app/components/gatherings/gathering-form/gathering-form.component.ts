@@ -69,7 +69,7 @@ export class GatheringFormComponent implements OnInit {
 		  	// MUST ADD ID FOR CHURCH AND LEADER
 		  	console.log('FORM VALUE : ', this.form.value)
 		    this.gatheringService.addGathering(this.form.value).subscribe(res => {
-		    	if (res.status = 200) {
+		    	if (res.status === 'success') { 
 			      console.log('RESPONSE : ', res)
 		    	} else {
 		    		console.log('unsuccessful API call', res);	

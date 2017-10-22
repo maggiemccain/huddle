@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 // USERS
 router.get('/users', db.getAllUsers);
 router.get('/users/:id', db.getSingleUser);
+router.get('/users/email/:email', db.getUserByEmail);
 router.post('/users', db.createUser);
 router.put('/users/:id', db.updateUser);
 router.delete('/users/:id', db.removeUser);

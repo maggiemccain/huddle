@@ -42,6 +42,10 @@ const ROUTES = [
     component: UserProfileComponent
   },
   {
+    path: 'user/:id',
+    component: UserProfileComponent
+  },
+  {
     path: 'new-user',
     component: NewUserFormComponent
   },

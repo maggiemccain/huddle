@@ -50,10 +50,34 @@ function getSingleUser(req, res, next) {
     });
 };
 
+function getUserByEmail(req, res, next) { 
+  var email = req.params.email;
+  db.any('select * from users where email = $1', email)
+    .then(function (data) {
+      if (data.length === 0) {
+        res.status(200)
+          .json({
+            status: 'success',
+            message: 'No user found'
+          });
+      } else {
+        res.status(200)
+          .json({
+            status: 'success',
+            data: data,
+            message: 'One user found'
+          });
+      }
+      // handle outlier scenarios
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
 function createUser(req, res, next) {
-  req.body.phone = parseInt(req.body.phone);
-  db.result('insert into users (firstName, lastName, email, phone)' +
-      'values(${firstname}, ${lastname}, ${email}, ${phone})',
+  db.result('insert into users (firstName, lastName, email)' +
+      'values(${firstname}, ${lastname}, ${email})',
     req.body)
     .then(function (result) {
       res.status(200)
@@ -230,6 +254,7 @@ function removeChurch(req, res, next) {
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
+  getUserByEmail: getUserByEmail,
   createUser: createUser,
   updateUser: updateUser,
   removeUser: removeUser,

@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class UsersService {
+  currentUserProfile: any;
 
   constructor(private http: Http) { }
 
@@ -15,19 +16,18 @@ export class UsersService {
 
   getSingleUser(): Observable<any> {
   	let body = '3'
-  	let url = '/api/users/' + body
+  	let url = '/api/users/' + body;
   	return this.http.get(url)
   		.map(res => res.json());
   };
 
-  addUser(payload?): Observable<any> {
-    if (!payload) {
-      let payload = {firstname: 'Ester',
-          lastname: 'Zellwig',
-          email: 'eh.atl09@uga.org',
-          phone: 7}
+  getUserByEmail(email: string): Observable<any> {
+    let url = '/api/users/email/' + email;
+    return this.http.get(url)
+      .map(res => res.json());
+  }
 
-    }
+  addUser(payload): Observable<any> {
   	return this.http.post('/api/users', payload)
   		.map(res => res.json());
   };
@@ -47,5 +47,13 @@ export class UsersService {
   	let url = '/api/users/' + id
   	return this.http.put(url, body)
   		.map(res => res.json());
-  }
+  };
+
+  getCurrentUser(): any {
+    return this.currentUserProfile
+  };
+
+  setCurrentUser(userProfile: any) {
+    this.currentUserProfile = userProfile;
+  };
 }

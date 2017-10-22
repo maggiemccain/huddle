@@ -10,8 +10,9 @@ import { NewUserFormComponent } from '../new-user-form/new-user-form.component';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-	users: Array<Object>;
-  profile: any;
+	private users: Array<Object>;
+  private profile: any;
+  public currentUser: any;
 
   constructor(private userService: UsersService, public auth: AuthService) {}
 
@@ -20,12 +21,30 @@ export class UserProfileComponent implements OnInit {
 
     if (this.auth.userProfile) {
       this.profile = this.auth.userProfile;
+      this.getUserByEmail(this.profile.nickname + '@gmail.com');
     } else {
       this.auth.getProfile((err, profile) => {
         console.log('PROFILE:', profile)
         this.profile = profile;
+        this.getUserByEmail(this.profile.nickname + '@gmail.com');
       });
     }
+  };
+
+  getUserByEmail(email:string) {
+    this.userService.getUserByEmail(email).subscribe((res) => {
+      if (res.status === 'success' && res.message === 'No user found') {
+          console.log(res)
+         // create new user --> callback to new-user form after google login?
+         this.addUser();
+      } else if (res.status === 'success' && res.message === 'One user found') {
+        console.log(res)
+        this.currentUser = res.data[0];
+        this.userService.setCurrentUser(this.currentUser);
+      }
+    }, err => {
+      console.log('ERRORRRRR', err)
+    })
   };
 
   getAllUsers() {
@@ -60,10 +79,18 @@ export class UserProfileComponent implements OnInit {
   };
 
   addUser() {
-    this.userService.addUser().subscribe(user => {
+    let user = 
+      {
+        firstname: this.profile.given_name,
+        lastname: this.profile.family_name,
+        email: this.profile.nickname + '@gmail.com'
+      };
+    this.userService.addUser(user).subscribe(user => {
       console.log('ADDED user, ', user)
+    }, err => {
+      console.log('ERROR: ', err)
     })
-    this.getAllUsers();
+    // this.getAllUsers();
   };
 
   // removePup() {
