@@ -157,6 +157,21 @@ function createGathering(req, res, next) {
     });
 };
 
+function getGatheringsByChurch(req, res, next) {
+  db.any('select * from gatherings where church_id = $1', req.params.id)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success', 
+          data: data,
+          message: 'Retrieved ALL gatherings by church'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
 // CHURCHES
 
 function getAllChurches(req, res, next) {
@@ -262,6 +277,7 @@ module.exports = {
   createGathering: createGathering,
   getAllChurches: getAllChurches,
   getSingleChurch: getSingleChurch,
+  getGatheringsByChurch: getGatheringsByChurch,
   createChurch: createChurch,
   updateChurch: updateChurch,
   removeChurch: removeChurch,

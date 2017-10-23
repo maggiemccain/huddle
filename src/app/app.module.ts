@@ -34,7 +34,11 @@ const ROUTES = [
     component: LandingPageComponent
   },
   {
-    path: 'map',
+    path: 'map/:type',
+    component: MapComponent
+  },
+  {
+    path: 'map/huddles/:church',
     component: MapComponent
   },
   {

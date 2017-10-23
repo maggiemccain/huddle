@@ -19,12 +19,12 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     // this.getAllUsers();
 
-    if (this.auth.userProfile) {
+    if (this.auth.userProfile !== undefined) {
       this.profile = this.auth.userProfile;
       this.getUserByEmail(this.profile.nickname + '@gmail.com');
     } else {
       this.auth.getProfile((err, profile) => {
-        console.log('PROFILE:', profile)
+        console.log('PROFILE:', profile, err);
         this.profile = profile;
         this.getUserByEmail(this.profile.nickname + '@gmail.com');
       });

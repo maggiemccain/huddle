@@ -36,6 +36,12 @@ export class GatheringsService {
   	let url = '/api/gatherings/' + id
   	return this.http.put(url, body)
   		.map(res => res.json());
+  };
+
+  getGatheringsByChurch(id: any): Observable<any> {
+    let url = '/api/gatherings/church/' + id
+    return this.http.get(url)
+      .map(res => res.json());
   }
 
 }

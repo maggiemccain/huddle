@@ -31,6 +31,7 @@ router.delete('churches/:id', db.removeChurch);
 
 // GATHERINGS
 router.get('/gatherings', db.getAllGatherings);
+router.get('/gatherings/church/:id', db.getGatheringsByChurch);
 // router.get('/gatherings/:id', db.getSingleGathering);
 router.post('/gatherings', db.createGathering);
 // router.put('/gatherings/:id', db.updateGathering);

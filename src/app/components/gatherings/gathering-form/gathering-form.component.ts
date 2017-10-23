@@ -23,8 +23,8 @@ export class GatheringFormComponent implements OnInit {
   			  private churchService: ChurchService,
   			  private userService: UsersService,
   			  public router: Router,
-	          private fb: FormBuilder,
-	          public mapService: MapService) { 
+          private fb: FormBuilder,
+          public mapService: MapService) { 
    this.form = this.fb.group({
     "title": [''],
     "location": [''],
