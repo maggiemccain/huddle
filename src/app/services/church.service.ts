@@ -16,7 +16,7 @@ export class ChurchService {
   getSingleChurch(id: any): Observable<any> {
   	let url = '/api/churches/' + id
   	return this.http.get(url)
-  		.map(res => res.json());
+  		.map(res => res.json())
   };
 
   addChurch(payload): Observable<any> {

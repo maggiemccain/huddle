@@ -191,14 +191,22 @@ function getAllChurches(req, res, next) {
 
 function getSingleChurch(req, res, next) { 
   var churchId = parseInt(req.params.id);
-  db.one('select * from churches where id = $1', churchId)
+  db.any('select * from churches where id = $1', churchId)
     .then(function (data) {
-      res.status(200)
-        .json({
-          status: 'success',
-          data: data,
-          message: 'Retrieved ONE church'
-        });
+      if (data.length === 1) {
+        res.status(200)
+          .json({
+            status: 'success',
+            data: data,
+            message: 'Retrieved ONE church'
+          });
+      } else if (data.length === 0) {
+          res.status(200)
+            .json({
+              status: 'error',
+              message: 'No church found.'
+          });
+      }
     })
     .catch(function (err) {
       return next(err);

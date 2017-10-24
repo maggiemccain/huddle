@@ -3,6 +3,7 @@ import { MapService } from '../../services/map.service';
 import { GatheringsService } from '../../services/gatherings.service';
 import { ChurchService } from '../../services/church.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-map',
@@ -11,10 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MapComponent implements OnInit {
 	geocoder;
+  churchId: any;
   type: string;
   lat: number;
   lng: number;
   list: Object[] = []; 
+  listings: any[];
 
   constructor(private mapService: MapService, 
               private gatheringsService: GatheringsService,
@@ -23,34 +26,53 @@ export class MapComponent implements OnInit {
               private churchService: ChurchService) { }
 
     ngOnInit() { 
+      this.geoLocation();
+      this.route.params.subscribe((params) => {
+        this.loadParams(params);
+      }, err => {
+        console.log('ERROR: ', err)
+      });
+    };
+
+    geoLocation(): void {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-        	setTimeout(() => { //need to figure out timing issue here
-          	this.lat =  position.coords.latitude;
-          	this.lng =  position.coords.longitude;
-        	}, 3000)
+          setTimeout(() => { //need to figure out timing issue here
+            this.lat =  position.coords.latitude;
+            this.lng =  position.coords.longitude;
+          }, 3000)
         }, function() {
-        	console.log('no geo locator!')
+          console.log('no geo locator!')
           // this.handleLocationError(true, infoWindow, map.getCenter());
         });
       } else {
         // Browser doesn't support Geolocation
         // this.handleLocationError(false, infoWindow, map.getCenter());
       }
-      this.route.params.subscribe((params) => {
-        if (params.type) {
-          this.type = params.type
-          if (this.type === 'huddles') {
-            this.getAllGatherings();
-          } else {
-            this.getAllChurches();
-          }
-        } else if (params.church) {
-          this.type = 'huddles';
-          this.getGatheringsByChurch(params.church);
+    };
+
+    loadParams(params: any): void {
+      if (params.type) {
+        this.type = params.type
+        if (this.type === 'huddles') {
+          this.getAllGatherings();
+        } else {
+          this.getAllChurches();
         }
-      });
-    }
+      } else if (params.church) {
+        this.type = 'huddles';
+        this.churchService.getSingleChurch(params.church).subscribe((res) => {
+          if (res.status === 'success') {
+            this.churchId = res.data[0].id;
+            this.getGatheringsByChurch(this.churchId);
+          } else if (res.status === 'error') {
+            alert(res.message);
+          }
+        }, err => {
+          console.log('ERROR: ', err)
+        })
+      }
+    };
 
     log(e) {
     	console.log(e.target.innerText);
@@ -85,7 +107,7 @@ export class MapComponent implements OnInit {
 
     getGatheringsByChurch(id:any): void {
       this.gatheringsService.getGatheringsByChurch(id).subscribe((gatherings) => {
-        console.log('GATHERINGS BY CHURCH', gatherings)
+        this.listings = _.cloneDeep(gatherings['data']);
         let huddles = gatherings['data']
         huddles.forEach((huddle)=> {
           this.createMarker(huddle);
@@ -108,6 +130,7 @@ export class MapComponent implements OnInit {
 
     getAllChurches(): void {
        this.churchService.getAllChurches().subscribe((churchList) => {
+         this.listings = _.cloneDeep(churchList['data']);
         let churches = churchList['data']
         churches.forEach((church)=> {
           this.createMarker(church);
@@ -122,8 +145,8 @@ export class MapComponent implements OnInit {
     };
 
     viewChurchGatherings(item) {
-      console.log('CLICKING THIS', item)
-      // maintain fulll listing from endpoints so you can compare what was clicked on to master list, then get gatherings per list view
+      let selected = this.listings.filter((listItem) => item.lat === Number(listItem.latitude) && item.lng === Number(listItem.longitude));
+      this.router.navigate(['/map/huddles/' + selected[0].id]);
     }
 }
 
