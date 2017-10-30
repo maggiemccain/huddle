@@ -1,5 +1,10 @@
 const promise = require('bluebird');
 
+// const memberships = require('./memberships.js');
+// const users = require('./users.js');
+// const churches = require('./js');
+// const gatherings = require('./gatherings.js');
+
 const options = {
   // Initialization Options
   promiseLib: promise
@@ -16,8 +21,6 @@ const db = pgp(connectionString);
 //     user: '',
 //     password: ''
 // });
-
-// add query functions
 
 function getAllUsers(req, res, next) {
   db.any('select * from users')
@@ -43,6 +46,22 @@ function getSingleUser(req, res, next) {
           status: 'success',
           data: data,
           message: 'Retrieved ONE user'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
+function getUsersByChurch(req, res, next) { 
+  var id = req.params.id;
+  db.any('select * from users where church_id = $1', id)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Found church members'
         });
     })
     .catch(function (err) {
@@ -274,10 +293,79 @@ function removeChurch(req, res, next) {
     });
 };
 
+
+// MEMBERSHIP
+
+function getMembershipByGathering(req, res, next) { 
+  var id = req.params.id;
+  db.any('select * from memberships where gathering_id = $1', id)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Membership of gathering found',
+          data: data
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
+function addMembership(req, res, next) { 
+  db.result('insert into memberships (member_id, gathering_id, church_id)' +
+      'values(${member_id}, ${gathering_id}, ${church_id})',
+    req.body)
+    .then(function (result) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Membership added.',
+          data: result
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
+// function updateMembership(req, res, next) {  FIGURE OUT HOW SOMEONE WILL UPDATE THEIR MEMBERSHIP or just remove
+//   var userId = parseInt(req.params.id);
+//   db.one('select * from memberships where id = $1', userId)
+//     .then(function (data) {
+//       res.status(200)
+//         .json({
+//           status: 'success',
+//           data: data,
+//           message: 'Retrieved ONE user'
+//         });
+//     })
+//     .catch(function (err) {
+//       return next(err);
+//     });
+// };
+
+function getMembershipByUser(req, res, next) { 
+  var id = req.params.gathering_id;
+  db.any('select * from memberships where gathering_id = $1', id)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Membership of gathering found',
+          data: data
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
   getUserByEmail: getUserByEmail,
+  getUsersByChurch: getUsersByChurch,
   createUser: createUser,
   updateUser: updateUser,
   removeUser: removeUser,
@@ -289,4 +377,7 @@ module.exports = {
   createChurch: createChurch,
   updateChurch: updateChurch,
   removeChurch: removeChurch,
+  getMembershipByGathering: getMembershipByGathering,
+  addMembership: addMembership,
+  getMembershipByUser: getMembershipByUser
 };

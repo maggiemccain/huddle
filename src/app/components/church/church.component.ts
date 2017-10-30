@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChurchService } from '../../services/church.service';
+import { GatheringsService } from '../../services/gatherings.service';
+import { MembershipService } from '../../services/membership.service';
+import { UsersService } from '../../services/users.service';
 import { MapService } from '../../services/map.service';
 import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, Validators, FormBuilder, NgForm, NgModel } from '@angular/forms';
@@ -11,6 +14,8 @@ import { FormGroup, FormControl, Validators, FormBuilder, NgForm, NgModel } from
   styleUrls: ['./church.component.scss']
 })
 export class ChurchComponent implements OnInit, OnDestroy {
+  members: Array<any> = [];
+  huddles: Array<any> = [];
   profileSub: Subscription;
   readonly: boolean = true;
   form: FormGroup;
@@ -20,25 +25,30 @@ export class ChurchComponent implements OnInit, OnDestroy {
   			  private churchService: ChurchService,
   			  public router: Router,
           private fb: FormBuilder,
-          public mapService: MapService) { }
+          public mapService: MapService,
+          private userService: UsersService,
+          private gatheringService: GatheringsService,
+          private membershipService: MembershipService) { }
 
   ngOnInit() {
-  	this.route.params.subscribe((params) => this.getChurchProfile(params.id));
-     this.form = this.fb.group({
-        "name": [''],
-        "street": [''],
-        "city":[''],
-        "state":[''],
-        "zip":[''],
-        "adminFirstName":[''], 
-        "adminLastName":[''],
-        "adminEmail":['']
+    this.form = this.fb.group({
+      "name": [''],
+      "street": [''],
+      "city":[''],
+      "state":[''],
+      "zip":[''],
+      "adminFirstName":[''], 
+      "adminLastName":[''],
+      "adminEmail":['']
     });
+  	this.route.params.subscribe((params) => this.getChurchProfile(params.id));
   };
   getChurchProfile(id: any):void {
   	this.profileSub = this.churchService.getSingleChurch(id).subscribe((data) => {
   		if (data.status === 'success') {
-  			this.churchDetails = data.data;
+  			this.churchDetails = data.data[0];
+        this.getChurchMembers(this.churchDetails['id']);
+        this.getHuddles(this.churchDetails['id']);
   		} else {
         console.log('ERROR: Unsuccessful API request.')
   		}
@@ -51,6 +61,30 @@ export class ChurchComponent implements OnInit, OnDestroy {
     if (this.readonly) {
       this.getChurchProfile(this.churchDetails['id']); // REDO WITH UNDERSCORE OR LODASH
     };
+  };
+  getChurchMembers(id: any): void {
+    this.userService.getUsersByChurch(id).subscribe((users) => {
+      this.members = users.data;
+    }, err => {
+      console.log('ERROR: ', err);
+    })
+  };
+  getHuddleMembership(id:any): void {
+    this.membershipService.getMembershipByGathering(id).subscribe((memberCount) => {
+      console.log('MEMBER COUNT', memberCount);
+    }, err => {
+      console.log('ERROR: ', err);
+    })
+  };
+  getHuddles(id: any): void {
+    this.gatheringService.getGatheringsByChurch(id).subscribe((huddles) => {
+      this.huddles = huddles.data;
+      this.huddles.forEach((huddle) => {
+        huddle['membership'] = this.getHuddleMembership(huddle.id);
+      })
+    }, err => {
+      console.log('ERROR: ', err);
+    })
   };
   onUpdate(): void {
     this.readonly = true;

@@ -78,5 +78,27 @@
 </form>
 <div>
 	<strong>Gatherings:</strong>
-	<p>TBD</p>
+	<table>
+		<tr>
+			<th>Gathering</th>
+			<th>Schedule</th>
+			<th>Participation</th>
+		</tr>
+		<tr></tr>
+	</table>
+</div>
+<div>
+	<strong>Full List of Members:</strong>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Gender</th>
+		</tr>
+		<tr *ngFor="let member of members">
+			<td>{{member.firstname}}  {{member.lastname}}</td>
+			<td>{{member.email}}</td>
+			<td>{{member.gender}}</td>
+		</tr>
+	</table>
 </div>

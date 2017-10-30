@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersService } from './services/users.service';
 import { GatheringsService } from './services/gatherings.service';
+import { MembershipService } from './services/membership.service';
 import { AuthService } from './services/auth.service';
 import { MapService } from './services/map.service';
 import { ChurchService } from './services/church.service';
@@ -95,7 +96,7 @@ const ROUTES = [
     AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 
   ],
-  providers: [ UsersService, AuthService, MapService, GatheringsService, ChurchService ],
+  providers: [ UsersService, AuthService, MapService, GatheringsService, ChurchService, MembershipService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

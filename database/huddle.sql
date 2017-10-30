@@ -67,7 +67,7 @@ INSERT INTO users (firstName, lastName, email, church_id)
 	dateCreated timestamp DEFAULT CURRENT_TIMESTAMP,
 	church_id int NOT NULL REFERENCES churches(id) ON DELETE CASCADE,
 	leader_id int NOT NULL REFERENCES users(id),
-	PRIMARY KEY (church_id, leader_id, title)
+	PRIMARY KEY (church_id, leader_id, title) 
  );
 
   INSERT INTO gatherings (title, latitude, longitude, church_id, leader_id)
@@ -76,19 +76,20 @@ INSERT INTO users (firstName, lastName, email, church_id)
   INSERT INTO gatherings (title, latitude, longitude, church_id, leader_id)
   	VALUES ('Passion City Church Mission Team Meeting', 33.8172, -84.3712, 2, 3);
 
- CREATE TABLE users_gatherings (
+ CREATE TABLE memberships (
   member_id int NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   gathering_id int NOT NULL REFERENCES gatherings(id) ON DELETE CASCADE,
   dateJoined timestamp DEFAULT CURRENT_TIMESTAMP,
   departed boolean DEFAULT FALSE,
   dateDeparted timestamp,
+  church_id int NOT NULL REFERENCES churches(id) ON DELETE CASCADE,
   PRIMARY KEY (member_id, gathering_id)
 );
 
--- INSERT INTO users (member_id, gathering_id)
--- 	VALUES (1, 2);
+INSERT INTO memberships (member_id, gathering_id, church_id)
+	VALUES (1, 1, 1);
 
--- INSERT INTO users (member_id, gathering_id)
--- 	VALUES (2, 1);
+INSERT INTO memberships (member_id, gathering_id, church_id)
+	VALUES (2, 2, 2);
 
 

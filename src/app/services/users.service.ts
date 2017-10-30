@@ -25,7 +25,13 @@ export class UsersService {
     let url = '/api/users/email/' + email;
     return this.http.get(url)
       .map(res => res.json());
-  }
+  };
+
+  getUsersByChurch(id: any): Observable<any> {
+    let url = '/api/users/church/' + id;
+    return this.http.get(url)
+      .map(res => res.json());
+  };
 
   addUser(payload): Observable<any> {
   	return this.http.post('/api/users', payload)
