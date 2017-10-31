@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChurchService } from '../../services/church.service';
 import { GatheringsService } from '../../services/gatherings.service';
@@ -6,6 +7,7 @@ import { MembershipService } from '../../services/membership.service';
 import { UsersService } from '../../services/users.service';
 import { MapService } from '../../services/map.service';
 import { Subscription } from 'rxjs/Subscription';
+import {JoinDialogComponent} from '../join-dialog/join-dialog.component'
 import { FormGroup, FormControl, Validators, FormBuilder, NgForm, NgModel } from '@angular/forms';
 
 @Component({
@@ -15,6 +17,7 @@ import { FormGroup, FormControl, Validators, FormBuilder, NgForm, NgModel } from
 })
 export class ChurchComponent implements OnInit, OnDestroy {
   members: Array<any> = [];
+  noChurchFound: boolean = false;
   huddles: Array<any> = [];
   profileSub: Subscription;
   readonly: boolean = true;
@@ -28,9 +31,11 @@ export class ChurchComponent implements OnInit, OnDestroy {
           public mapService: MapService,
           private userService: UsersService,
           private gatheringService: GatheringsService,
-          private membershipService: MembershipService) { }
+          private membershipService: MembershipService,
+          public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.noChurchFound = false;
     this.form = this.fb.group({
       "name": [''],
       "street": [''],
@@ -43,6 +48,19 @@ export class ChurchComponent implements OnInit, OnDestroy {
     });
   	this.route.params.subscribe((params) => this.getChurchProfile(params.id));
   };
+  openDialog(): void { 
+    let dialogRef = this.dialog.open(JoinDialogComponent, {
+      width: '600px',
+      data: {first: this.members[0].firstname,
+              last: this.members[0].lastname,
+              huddles: this.huddles }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      console.log('huddle to join', result);
+    });
+  };
   getChurchProfile(id: any):void {
   	this.profileSub = this.churchService.getSingleChurch(id).subscribe((data) => {
   		if (data.status === 'success') {
@@ -51,6 +69,7 @@ export class ChurchComponent implements OnInit, OnDestroy {
         this.getHuddles(this.churchDetails['id']);
   		} else {
         console.log('ERROR: Unsuccessful API request.')
+        this.noChurchFound = true;
   		}
   	}, err => {
   		console.log('ERROR: ', err)
@@ -62,28 +81,70 @@ export class ChurchComponent implements OnInit, OnDestroy {
       this.getChurchProfile(this.churchDetails['id']); // REDO WITH UNDERSCORE OR LODASH
     };
   };
+  getMemberHuddleCount(id:any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.membershipService.getGatheringsByMember(id).subscribe((res) => {
+        resolve(res);
+      }, err => {
+        reject(err);
+      })
+    })
+  }
   getChurchMembers(id: any): void {
     this.userService.getUsersByChurch(id).subscribe((users) => {
       this.members = users.data;
+      this.members.forEach((member) => {
+        this.getMemberHuddleCount(member.id)
+          .then((res) => {
+            member['huddleCount'] = res['data'].length;
+          })
+      })
     }, err => {
       console.log('ERROR: ', err);
     })
   };
-  getHuddleMembership(id:any): void {
-    this.membershipService.getMembershipByGathering(id).subscribe((memberCount) => {
-      console.log('MEMBER COUNT', memberCount);
-    }, err => {
-      console.log('ERROR: ', err);
+  getHuddleMembership(id:any): any {
+    return new Promise((resolve, reject) => {
+      this.membershipService.getMembershipByGathering(id).subscribe((memberCount) => {
+         resolve(memberCount['data'].length)
+      }, err => {
+        reject(err)
+      })
     })
   };
   getHuddles(id: any): void {
     this.gatheringService.getGatheringsByChurch(id).subscribe((huddles) => {
       this.huddles = huddles.data;
       this.huddles.forEach((huddle) => {
-        huddle['membership'] = this.getHuddleMembership(huddle.id);
+        this.getHuddleMembership(huddle.id)
+          .then((res) => {
+            huddle['membership'] = res;
+          })
+          .catch((err) => {
+            console.log('ERROR: ', err);
+            huddle['membership'] = '';
+          })
+        this.getLeader(huddle.leader_id)
+         .then((res) => {
+            huddle['leader'] = res.firstname + ' ' + res.lastname;
+         })
+         .catch((err) => {
+           console.log('ERROR: ', err);
+           huddle['leader'] = '';
+         })
+
       })
     }, err => {
       console.log('ERROR: ', err);
+    })
+  };
+  getLeader(id: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.userService.getSingleUser(id).subscribe((user) => {
+         resolve(user.data)
+      }, err => {
+        reject(err)
+      })
     })
   };
   onUpdate(): void {

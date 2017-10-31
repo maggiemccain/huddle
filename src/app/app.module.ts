@@ -7,7 +7,11 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { FormsModule }   from '@angular/forms';
 import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
-
+// MATERIAL COMPONENTS
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatDialogModule} from '@angular/material';
+import {MatSelectModule} from '@angular/material';
+// CUSTOM COMPONENTS
 import { AppComponent } from './app.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersService } from './services/users.service';
@@ -23,6 +27,7 @@ import { NewChurchFormComponent } from './components/new-church-form/new-church-
 import { ChurchComponent } from './components/church/church.component';
 import { GatheringFormComponent } from './components/gatherings/gathering-form/gathering-form.component';
 import { GatheringProfileComponent } from './components/gatherings/gathering-profile/gathering-profile.component';
+import { JoinDialogComponent } from './components/join-dialog/join-dialog.component';
 
 const ROUTES = [
   {
@@ -83,13 +88,17 @@ const ROUTES = [
     NewChurchFormComponent,
     ChurchComponent,
     GatheringFormComponent,
-    GatheringProfileComponent
+    GatheringProfileComponent,
+    JoinDialogComponent
   ],
+  entryComponents: [JoinDialogComponent],
   imports: [
     BrowserModule,
     HttpModule,
     ReactiveFormsModule,
     CommonModule,
+    BrowserAnimationsModule,
+    MatDialogModule, MatSelectModule,
     AgmCoreModule.forRoot({
       apiKey: ''
     }),

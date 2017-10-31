@@ -9,7 +9,7 @@ export class MembershipService {
   constructor(private http: Http) { }
 
   getMembershipByGathering(id: any): Observable<any> {
-  	let url = '/api/membership/church/' + id
+  	let url = '/api/membership/gathering/' + id
   	return this.http.get(url)
   		.map(res => res.json())
   };
@@ -18,5 +18,11 @@ export class MembershipService {
   // 	return this.http.post('/api/churches', payload)
   // 		.map(res => res.json());
   // };
+
+  getGatheringsByMember(id: any): Observable<any> {
+    let url = '/api/membership/member/' + id
+    return this.http.get(url)
+      .map(res => res.json())
+  };
 
 }

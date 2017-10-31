@@ -14,9 +14,8 @@ export class UsersService {
   		.map(res => res.json());
   };
 
-  getSingleUser(): Observable<any> {
-  	let body = '3'
-  	let url = '/api/users/' + body;
+  getSingleUser(id:any): Observable<any> {
+  	let url = '/api/users/' + id;
   	return this.http.get(url)
   		.map(res => res.json());
   };

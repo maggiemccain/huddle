@@ -80,7 +80,7 @@ export class GatheringFormComponent implements OnInit {
 		    });
   		})
   		.catch((err) => {
-  			console.log(err)
+  			console.log('ERROR: ', err)
   		});
   };
   reset() {

@@ -57,8 +57,8 @@ export class UserProfileComponent implements OnInit {
 
   };
 
-  getSingleUser() {
-    this.userService.getSingleUser().subscribe(user => {
+  getSingleUser(id:any) {
+    this.userService.getSingleUser(id).subscribe(user => {
       console.log('single user, ', user)
     })
   };

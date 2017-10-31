@@ -361,6 +361,22 @@ function getMembershipByUser(req, res, next) {
     });
 };
 
+function getMembersGatherings(req, res, next) { 
+  var id = req.params.id;
+  db.any('select * from memberships where member_id = $1', id)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Member gatherings found.',
+          data: data
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
@@ -379,5 +395,6 @@ module.exports = {
   removeChurch: removeChurch,
   getMembershipByGathering: getMembershipByGathering,
   addMembership: addMembership,
-  getMembershipByUser: getMembershipByUser
+  getMembershipByUser: getMembershipByUser,
+  getMembersGatherings: getMembersGatherings
 };
