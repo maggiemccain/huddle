@@ -41,6 +41,7 @@ router.post('/gatherings', db.createGathering);
 // MEMBERSHIP
 router.get('/membership/gathering/:id', db.getMembershipByGathering);
 router.get('/membership/member/:id', db.getMembersGatherings);
+router.post('/membership', db.joinGathering);
 
 module.exports = router;
 

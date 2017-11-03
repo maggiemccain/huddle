@@ -9,8 +9,7 @@ import { AgmCoreModule, MapsAPILoader } from '@agm/core';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 // MATERIAL COMPONENTS
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogModule} from '@angular/material';
-import {MatSelectModule} from '@angular/material';
+import {MatDialogModule, MatButtonModule, MatSelectModule, MatCardModule, MatTableModule} from '@angular/material';
 // CUSTOM COMPONENTS
 import { AppComponent } from './app.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
@@ -20,6 +19,7 @@ import { MembershipService } from './services/membership.service';
 import { AuthService } from './services/auth.service';
 import { MapService } from './services/map.service';
 import { ChurchService } from './services/church.service';
+import { TableService } from './services/table.service';
 import { NewUserFormComponent } from './components/new-user-form/new-user-form.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { MapComponent } from './components/map/map.component';
@@ -28,6 +28,7 @@ import { ChurchComponent } from './components/church/church.component';
 import { GatheringFormComponent } from './components/gatherings/gathering-form/gathering-form.component';
 import { GatheringProfileComponent } from './components/gatherings/gathering-profile/gathering-profile.component';
 import { JoinDialogComponent } from './components/join-dialog/join-dialog.component';
+import { TableComponent } from './components/table/table.component';
 
 const ROUTES = [
   {
@@ -89,7 +90,8 @@ const ROUTES = [
     ChurchComponent,
     GatheringFormComponent,
     GatheringProfileComponent,
-    JoinDialogComponent
+    JoinDialogComponent,
+    TableComponent
   ],
   entryComponents: [JoinDialogComponent],
   imports: [
@@ -98,14 +100,14 @@ const ROUTES = [
     ReactiveFormsModule,
     CommonModule,
     BrowserAnimationsModule,
-    MatDialogModule, MatSelectModule,
+    MatDialogModule, MatSelectModule, MatButtonModule, MatCardModule, MatTableModule,
     AgmCoreModule.forRoot({
-      apiKey: ''
+      apiKey: 'AIzaSyDH14DDkf5BgZ0wedEj0aGB3RLgfL61m0c'
     }),
     AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 
   ],
-  providers: [ UsersService, AuthService, MapService, GatheringsService, ChurchService, MembershipService ],
+  providers: [ UsersService, AuthService, MapService, GatheringsService, ChurchService, MembershipService, TableService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -15,5 +15,6 @@ export class JoinDialogComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   };
-  ngOnInit() {};
+  ngOnInit() {
+  };
 }

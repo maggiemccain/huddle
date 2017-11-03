@@ -25,4 +25,9 @@ export class MembershipService {
       .map(res => res.json())
   };
 
+  newMembership(payload): Observable<any> {
+    return this.http.post('/api/membership', payload)
+      .map(res => res.json());
+  };
+
 }

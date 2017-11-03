@@ -1,6 +1,6 @@
 <h4 mat-dialog-title>Join a Huddle</h4>
 <div mat-dialog-content>
-  <p>Which huddle would you like to add {{data.first}} {{data.last}} to?</p>
+  <p>Which huddle would syou like to add {{data.user.firstname}} {{data.user.lastname}} to?</p>
 	<mat-form-field>
 	  <mat-select #hud placeholder="Huddle to join">
 	    <mat-option *ngFor="let huddle of data.huddles" [value]="huddle.id">{{ huddle.title }}</mat-option>
@@ -8,6 +8,6 @@
 	</mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="hud.value" tabindex="2">Join</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="{'huddle': hud.value, 'newMember': data.user}" tabindex="2">Join</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
 </div>

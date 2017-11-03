@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChurchService } from '../../services/church.service';
@@ -17,12 +17,20 @@ import { FormGroup, FormControl, Validators, FormBuilder, NgForm, NgModel } from
 })
 export class ChurchComponent implements OnInit, OnDestroy {
   members: Array<any> = [];
+  notification: string = '';
   noChurchFound: boolean = false;
   huddles: Array<any> = [];
+  memberTableColumns: Object[] = [{header: 'Name', column: 'displayName'},
+                                  {header: 'Email', column: 'email'},
+                                  {header: 'Gender', column: 'gender'},
+                                  {header: 'Huddles', column: 'huddleCount'},
+                                  ]
   profileSub: Subscription;
   readonly: boolean = true;
   form: FormGroup;
   churchDetails: Object = {};
+  @ViewChild('message') messageBox;
+  huddleTableContent: Object[];
 
   constructor(private route: ActivatedRoute, 
   			  private churchService: ChurchService,
@@ -48,17 +56,39 @@ export class ChurchComponent implements OnInit, OnDestroy {
     });
   	this.route.params.subscribe((params) => this.getChurchProfile(params.id));
   };
-  openDialog(): void { 
+  openDialog(member: Object): void { 
     let dialogRef = this.dialog.open(JoinDialogComponent, {
-      width: '600px',
-      data: {first: this.members[0].firstname,
-              last: this.members[0].lastname,
-              huddles: this.huddles }
+      width: '400px',
+      data: {
+              user: member,
+              huddles: this.huddles 
+            }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       console.log('huddle to join', result);
+      if (result !== undefined) {
+        let payload = {};
+        payload['member_id'] = result.newMember['id'];
+        payload['gathering_id'] = result.huddle;
+        payload['church_id'] = this.churchDetails['id']; 
+        this.membershipService.newMembership(payload).subscribe((res) => {
+          console.log('was join successful? ', res);
+          this.notification = 'Success! You added ' + result.newMember.firstname + ' ' + result.newMember.lastname + ' to a huddle!'; 
+          setTimeout(() => {
+            this.notification = '';
+          }, 5000);
+          this.getChurchProfile(this.churchDetails['id']);
+        }, err => {
+          let sub = 'duplicate key value violates unique constraint';
+           if (err._body.indexOf(sub) !== -1) {
+             this.notification = result.newMember.firstname + ' ' + result.newMember.lastname + ' is already a member of this huddle.' 
+             setTimeout(() => {
+               this.notification = '';
+             }, 5000)
+           }
+        })
+      }
     });
   };
   getChurchProfile(id: any):void {
@@ -94,6 +124,7 @@ export class ChurchComponent implements OnInit, OnDestroy {
     this.userService.getUsersByChurch(id).subscribe((users) => {
       this.members = users.data;
       this.members.forEach((member) => {
+        member['displayName'] = member.firstname + ' ' + member.lastname;
         this.getMemberHuddleCount(member.id)
           .then((res) => {
             member['huddleCount'] = res['data'].length;

@@ -11,7 +11,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://UNAME:PWORD#@localhost:5432/huddle';
+const connectionString = 'postgres://maggiemccain:strumpeT13@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
@@ -377,6 +377,23 @@ function getMembersGatherings(req, res, next) {
     });
 };
 
+function joinGathering(req, res, next) {
+  db.one('insert into memberships (member_id, gathering_id, church_id)' +
+      'values(${member_id}, ${gathering_id}, ${church_id}) RETURNING *',
+    req.body)
+    .then(function (result) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'New membership record created.',
+          data: result
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
 module.exports = {
   getAllUsers: getAllUsers,
   getSingleUser: getSingleUser,
@@ -396,5 +413,6 @@ module.exports = {
   getMembershipByGathering: getMembershipByGathering,
   addMembership: addMembership,
   getMembershipByUser: getMembershipByUser,
-  getMembersGatherings: getMembersGatherings
+  getMembersGatherings: getMembersGatherings,
+  joinGathering: joinGathering
 };
