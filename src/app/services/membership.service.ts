@@ -30,4 +30,18 @@ export class MembershipService {
       .map(res => res.json());
   };
 
+  updateMembership(payload): Observable<any> { //DEAL WITH REJOINING
+     //gathering and member id 
+     payload['departed'] = true;
+    let url = '/api/membership/' + payload.member_id + '/' + payload.gathering_id;
+    return this.http.put(url, payload)
+      .map(res => res.json());
+  };
+
+  removeMembership(memberId: any, gatheringId:any): Observable<any> {
+    let url = '/api/membership/' + memberId + '/' + gatheringId;
+    return this.http.delete(url)
+      .map(res => res.json());
+  };
+
 }

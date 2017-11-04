@@ -1,7 +1,7 @@
 <div class="church-wrapper" *ngIf="noChurchFound">
 	<mat-card>Sorry, we were not able to gather records for this church.  Please try again later.</mat-card>
 </div>
-<huddle-table [displayedColumns]="memberTableColumns" [dataSource]="members"></huddle-table>
+<!-- <huddle-table [displayedColumns]="memberTableColumns" [dataSource]="members"></huddle-table> -->
 <div class="church-wrapper" *ngIf="!noChurchFound">
 	<h2>{{churchDetails.name}}'s Profile</h2>
 	<button (click)="edit()">Edit</button>
@@ -114,7 +114,7 @@
 				<td>{{member.email}}</td>
 				<td>{{member.gender}}</td>
 				<td>{{member.huddleCount}}</td>
-				<td (click)="openDialog(member)"><a>Join Huddle</a></td>
+				<td class="link" (click)="openDialog(member)"><a>Join/Unjoin Huddle</a></td>
 			</tr>
 		</table>
 	</div>

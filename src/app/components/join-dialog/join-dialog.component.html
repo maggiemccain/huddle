@@ -1,13 +1,36 @@
-<h4 mat-dialog-title>Join a Huddle</h4>
-<div mat-dialog-content>
-  <p>Which huddle would syou like to add {{data.user.firstname}} {{data.user.lastname}} to?</p>
+<div *ngIf="displayFirstStep" style="height:300px;" mat-dialog-content>
+  <p>Which huddle would you like to add or remove {{data.user.firstname}} {{data.user.lastname}} from a huddle?</p>
+	<div mat-dialog-actions>
+	  <button mat-raised-button color="primary" (click)="actionToTake(true)" tabindex="2">Join</button>
+	  <button mat-raised-button color="primary" (click)="actionToTake(false)" tabindex="-1">Unjoin</button>
+	  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+	</div>
+</div>
+
+
+<div *ngIf="displayJoin" mat-dialog-content>
+  <p>Select huddle to add {{data.user.firstname}} {{data.user.lastname}} to.</p>
 	<mat-form-field>
 	  <mat-select #hud placeholder="Huddle to join">
-	    <mat-option *ngFor="let huddle of data.huddles" [value]="huddle.id">{{ huddle.title }}</mat-option>
+	    <mat-option *ngFor="let huddle of displayHuddles" [value]="huddle.id">{{ huddle.title }}</mat-option>
 	  </mat-select>
 	</mat-form-field>
+	<div mat-dialog-actions>
+	  <button mat-raised-button color="primary" [mat-dialog-close]="{'huddle': hud.value, 'newMember': data.user, 'joinStatus': true}" tabindex="2">Join</button>
+	  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+	</div>
 </div>
-<div mat-dialog-actions>
-  <button mat-raised-button color="primary" [mat-dialog-close]="{'huddle': hud.value, 'newMember': data.user}" tabindex="2">Join</button>
-  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+
+<div *ngIf="displayUnjoin" mat-dialog-content>
+  <p>Which huddle would you like to remove {{data.user.firstname}} {{data.user.lastname}} from?</p>
+	<mat-form-field>
+	  <mat-select #hud placeholder="Huddle to leave">
+	    <mat-option *ngFor="let huddle of displayHuddles" [value]="huddle.id">{{ huddle.title }}</mat-option>
+	  </mat-select>
+	</mat-form-field>
+	<div mat-dialog-actions>
+	  <button mat-raised-button color="primary" [mat-dialog-close]="{'huddle': hud.value, 'newMember': data.user, 'joinStatus': false}" tabindex="2">Remove
+	  </button>
+	  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+	</div>
 </div>

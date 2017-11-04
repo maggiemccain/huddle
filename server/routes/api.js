@@ -42,6 +42,8 @@ router.post('/gatherings', db.createGathering);
 router.get('/membership/gathering/:id', db.getMembershipByGathering);
 router.get('/membership/member/:id', db.getMembersGatherings);
 router.post('/membership', db.joinGathering);
+router.put('/membership/:member_id/:gathering_id', db.updateMembership)
+router.delete('/membership/:member_id/:gathering_id', db.removeMembership);
 
 module.exports = router;
 

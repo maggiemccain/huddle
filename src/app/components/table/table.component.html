@@ -1,28 +1,30 @@
-<div class="example-container mat-elevation-z8">
+<!-- <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
 
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="">
+<div *ngFor="let data of dataSource">
+	<div *ngFor="let column of displayedColumns">
+	    <ng-container  [matColumnDef]="column.header">
+	      <mat-header-cell *matHeaderCellDef> {{column.header}} </mat-header-cell>
+	      <mat-cell *matCellDef="let data"> {{data[column.column]}} </mat-cell>
+	    </ng-container>
+	</div>
+</div>
+    <ng-container  matColumnDef="">
       <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.displayName}} </mat-cell>
     </ng-container>
 
-    <!-- Name Column -->
     <ng-container matColumnDef="">
       <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.gender}} </mat-cell>
     </ng-container>
 
-    <!-- Weight Column -->
     <ng-container matColumnDef="">
       <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
     </ng-container>
 
-    <!-- Color Column -->
     <ng-container matColumnDef="">
       <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.huddleCount}} </mat-cell>
@@ -31,4 +33,4 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns.headers;"></mat-row>
   </mat-table>
-</div>
+</div> -->

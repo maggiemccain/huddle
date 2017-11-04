@@ -11,7 +11,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const connectionString = 'postgres://maggiemccain:strumpeT13@localhost:5432/huddle';
+const connectionString = 'postgres://UNAME:PWORD#@localhost:5432/huddle';
 // const config = process.env.DATABASE_URL ||  'postgres://someuser:somepassword@somehost:381/sometable'
 const db = pgp(connectionString);
 // var db = pgp({
@@ -393,6 +393,41 @@ function joinGathering(req, res, next) {
       return next(err);
     });
 };
+// router.put('/membership/:member_id/:gathering_id', db.updateMembership)
+
+function updateMembership(req, res, next) {
+  db.one('update memberships set member_id=$1, gathering_id=$2, church_id=$3, departed=$4 where member_id=$1 AND gathering_id=$2 RETURNING *',
+    [parseInt(req.body.member_id), parseInt(req.body.gathering_id), parseInt(req.body.church_id), req.body.departed])
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Updated Membership',
+          data: data
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
+
+function removeMembership(req, res, next) {
+  var member_id = parseInt(req.params.member_id);
+  var gathering_id = parseInt(req.params.gathering_id);
+  db.result('delete from memberships where member_id = $1 AND gathering_id = $2', [member_id, gathering_id])
+    .then(function (result) {
+      /* jshint ignore:start */
+      res.status(200)
+        .json({
+          status: 'success',
+          message: `Removed ${result.rowCount} Membership`
+        });
+      /* jshint ignore:end */
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+};
 
 module.exports = {
   getAllUsers: getAllUsers,
@@ -414,5 +449,7 @@ module.exports = {
   addMembership: addMembership,
   getMembershipByUser: getMembershipByUser,
   getMembersGatherings: getMembersGatherings,
-  joinGathering: joinGathering
+  joinGathering: joinGathering,
+  updateMembership: updateMembership,
+  removeMembership: removeMembership
 };

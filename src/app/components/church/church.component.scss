@@ -1,4 +1,11 @@
 .church-wrapper {
+	.link {
+		color: #007bff;
+		cursor: pointer;
+	}
+	.link:hover {
+		color: #0056b3
+	}
 	margin-left: 15px;
 	table {
 		margin: 20px 0;

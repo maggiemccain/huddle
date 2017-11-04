@@ -58,7 +58,7 @@ export class ChurchComponent implements OnInit, OnDestroy {
   };
   openDialog(member: Object): void { 
     let dialogRef = this.dialog.open(JoinDialogComponent, {
-      width: '400px',
+      width: '600px',
       data: {
               user: member,
               huddles: this.huddles 
@@ -66,14 +66,14 @@ export class ChurchComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('huddle to join', result);
-      if (result !== undefined) {
-        let payload = {};
-        payload['member_id'] = result.newMember['id'];
-        payload['gathering_id'] = result.huddle;
-        payload['church_id'] = this.churchDetails['id']; 
+      console.log('DIALOG RESPONSE', result);
+      // if (result && result['joinStatus']) {
+      let payload = {};
+      payload['member_id'] = result.newMember['id'];
+      payload['gathering_id'] = result.huddle;
+      payload['church_id'] = this.churchDetails['id']; 
+      if (result && result['joinStatus']) {
         this.membershipService.newMembership(payload).subscribe((res) => {
-          console.log('was join successful? ', res);
           this.notification = 'Success! You added ' + result.newMember.firstname + ' ' + result.newMember.lastname + ' to a huddle!'; 
           setTimeout(() => {
             this.notification = '';
@@ -81,14 +81,43 @@ export class ChurchComponent implements OnInit, OnDestroy {
           this.getChurchProfile(this.churchDetails['id']);
         }, err => {
           let sub = 'duplicate key value violates unique constraint';
-           if (err._body.indexOf(sub) !== -1) {
+           if (err['_body'].indexOf(sub) !== -1) {
              this.notification = result.newMember.firstname + ' ' + result.newMember.lastname + ' is already a member of this huddle.' 
              setTimeout(() => {
                this.notification = '';
              }, 5000)
            }
         })
+      } else if (result && !result['joinStatus']) {
+        this.membershipService.removeMembership(result.newMember['id'], result.huddle).subscribe((res) => {
+          this.notification = 'Success! You removed ' + result.newMember.firstname + ' ' + result.newMember.lastname + ' from a huddle!'; 
+          setTimeout(() => {
+            this.notification = '';
+          }, 5000);
+        }, err => {
+          console.log('ERROR: ', err);
+        })
+        // this.membershipService.updateMembership(payload).subscribe((res) => {
+        //   console.log('RESPONSE FROM ATTEMPTED DELETE ', res)
+        // }, err => {
+        //   console.log('ERROR: ', err);
+        // })
       }
+      this.refreshMembersHuddleCount();
+      this.huddles.forEach((huddle) => {
+        console.log('HAPPENING')
+        this.getHuddleMembership(huddle.id)
+          .then((res) => {
+            huddle['membership'] = res;
+          })
+          .catch((err) => {
+            console.log('ERROR: ', err);
+            huddle['membership'] = '';
+          })
+        })  
+
+    }, err => {
+      console.log('ERROR: ', err);
     });
   };
   getChurchProfile(id: any):void {
@@ -120,16 +149,26 @@ export class ChurchComponent implements OnInit, OnDestroy {
       })
     })
   }
+  refreshMembersHuddleCount() {
+    this.members.forEach((member) => {
+      member['displayName'] = member.firstname + ' ' + member.lastname;
+      this.getMemberHuddleCount(member.id)
+        .then((res) => {
+          member['huddleCount'] = res['data'].length;
+        })
+    })
+  }
   getChurchMembers(id: any): void {
     this.userService.getUsersByChurch(id).subscribe((users) => {
       this.members = users.data;
-      this.members.forEach((member) => {
-        member['displayName'] = member.firstname + ' ' + member.lastname;
-        this.getMemberHuddleCount(member.id)
-          .then((res) => {
-            member['huddleCount'] = res['data'].length;
-          })
-      })
+      // this.members.forEach((member) => {
+      //   member['displayName'] = member.firstname + ' ' + member.lastname;
+      //   this.getMemberHuddleCount(member.id)
+      //     .then((res) => {
+      //       member['huddleCount'] = res['data'].length;
+      //     })
+      // })
+      this.refreshMembersHuddleCount();
     }, err => {
       console.log('ERROR: ', err);
     })

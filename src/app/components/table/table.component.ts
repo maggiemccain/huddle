@@ -28,7 +28,7 @@ export class TableComponent implements OnInit {
 
 
 // export class TableDataSource extends DataSource<any> {
-//   * Connect function called by the table to retrieve one stream containing the data to render. 
+//   // * Connect function called by the table to retrieve one stream containing the data to render. 
 //   connect(): Observable<Object[]> {
 //     return Observable.of(data);
 //   }

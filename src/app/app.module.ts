@@ -102,7 +102,7 @@ const ROUTES = [
     BrowserAnimationsModule,
     MatDialogModule, MatSelectModule, MatButtonModule, MatCardModule, MatTableModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDH14DDkf5BgZ0wedEj0aGB3RLgfL61m0c'
+      apiKey: ''
     }),
     AgmSnazzyInfoWindowModule,
     RouterModule.forRoot(ROUTES) 
